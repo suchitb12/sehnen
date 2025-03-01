@@ -1,1 +1,1 @@
-# sehnen
+To start the network, run ./network.sh up.
