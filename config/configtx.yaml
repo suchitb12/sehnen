@@ -1,2 +1,4 @@
 Organizations:
-  - 
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP

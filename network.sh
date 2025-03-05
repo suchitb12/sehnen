@@ -22,3 +22,13 @@ function changeDirectory() {
   pushd "$1" > /dev/null 2>&1
   infoln "Changing to directory $1"
 }
+
+CONTAINER_CLI="docker"
+
+if command -v ${CONTAINER_CLI} > /dev/null 2>&1; then
+    infoln "${CONTAINER_CLI} is installed"
+    : ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI}-compose"}
+else
+    fatalln "${CONTAINER_CLI} is not installed"
+    exit 1
+fi
