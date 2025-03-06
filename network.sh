@@ -32,3 +32,10 @@ else
     fatalln "${CONTAINER_CLI} is not installed"
     exit 1
 fi
+
+function clearContainers() {
+  infoln "Removing remaining containers"
+  ${CONTAINER_CLI} rm -f $(${CONTAINER_CLI} ps -aq --filter label=service=hyperledger-fabric) 2>/dev/null || true
+  ${CONTAINER_CLI} rm -f $(${CONTAINER_CLI} ps -aq --filter name='dev-peer*') 2>/dev/null || true
+  ${CONTAINER_CLI} kill "$(${CONTAINER_CLI} ps -q --filter name=ccaas)" 2>/dev/null || true
+}
