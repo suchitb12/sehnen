@@ -39,3 +39,9 @@ function clearContainers() {
   ${CONTAINER_CLI} rm -f $(${CONTAINER_CLI} ps -aq --filter name='dev-peer*') 2>/dev/null || true
   ${CONTAINER_CLI} kill "$(${CONTAINER_CLI} ps -q --filter name=ccaas)" 2>/dev/null || true
 }
+
+  LOCAL_VERSION=$(peer version | sed -ne 's/^ Version: //p')
+  DOCKER_IMAGE_VERSION=$(${CONTAINER_CLI} run --rm hyperledger/fabric-peer:latest peer version | sed -ne 's/^ Version: //p')
+
+    infoln "LOCAL_VERSION=$LOCAL_VERSION"
+  infoln "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION"
