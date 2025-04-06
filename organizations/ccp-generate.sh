@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function one_line_pem {
-    echo "$(awk 'NF {sub(/\\n/, ""); printf "%s\\\\\\\n",$0;}' $1)"
+    echo "$(awk 'NF {printf "%s\\n", $0}' $1)"
 }
 
 function json_ccp {
@@ -12,7 +12,7 @@ function json_ccp {
         -e "s/\${CAPORT}/$3/" \
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
-        organizations/localdev/ccp-template.json
+        organizations/ccp-template.json
 }
 
 function yaml_ccp {
@@ -23,7 +23,7 @@ function yaml_ccp {
         -e "s/\${CAPORT}/$3/" \
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
-        organizations/localdev/ccp-template.yaml | sed -e $'s/\\\\n/\\\n          /g'
+        organizations/ccp-template.yaml | sed -e $'s/\\\\n/\\\n          /g'
 }
 
 ORG=1

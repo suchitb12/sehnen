@@ -51,6 +51,7 @@ function createOrgs() {
 
     infoln "Creating Org1 Identities"
 
+    PS4='\e[1;32m+ \e[0m'
     set -x
     cryptogen generate --config=./organizations/localdev/cryptogen/crypto-config-org1.yaml --output="organizations/localdev"
     res=$?
@@ -62,6 +63,7 @@ function createOrgs() {
     infoln "Creating Org2 Identities"
 
     set -x
+    PS4='+ '
     cryptogen generate --config=./organizations/localdev/cryptogen/crypto-config-org2.yaml --output="organizations/localdev"
     res=$?
     { set +x; } 2>/dev/null
@@ -93,11 +95,7 @@ function networkUp() {
     createOrgs
   fi
 
-  COMPOSE_FILES="-f compose/${COMPOSE_FILE_BASE} -f compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
-
-  if [ "${DATABASE}" == "couchdb" ]; then
-    COMPOSE_FILES="${COMPOSE_FILES} -f compose/${COMPOSE_FILE_COUCH} -f compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_COUCH}"
-  fi
+  COMPOSE_FILES="-f ./compose/${COMPOSE_FILE_BASE} -f ./compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
 
   DOCKER_SOCK="${DOCKER_SOCK}" ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} up -d 2>&1
 
@@ -105,5 +103,15 @@ function networkUp() {
   if [ $? -ne 0 ]; then
     fatalln "Unable to start network"
   fi
+
+  infoln "DOCKER HOST IS $DOCKER_SOCK"
+
 }
+
+function networkDown() {
+    COMPOSE_FILES="-f ./compose/${COMPOSE_FILE_BASE} -f ./compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
+    
+    DOCKER_SOCK="${DOCKER_SOCK}" ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} down --volumes --remove-orphans 2>&1
+}
+
 

@@ -33,3 +33,20 @@ function removeUnwantedImages() {
   infoln "Removing generated chaincode docker images"
   ${CONTAINER_CLI} image rm -f $(${CONTAINER_CLI} images -aq --filter reference='dev-peer*') 2>/dev/null || true
 }
+
+function infoln() {
+    echo -e "\033[1;34m$*\033[0m" # Example: Prints info messages in blue
+}
+
+function println() {
+  echo -e "$1"
+}
+
+function errorln() {
+  println "${C_RED}${1}${C_RESET}"
+}
+
+function fatalln() {
+  errorln "$1"
+  exit 1
+}
