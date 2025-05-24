@@ -1,0 +1,12 @@
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help
+osnadmin: error: parsing arguments: reading config block: open ./channel-artifacts/mychannel.block: no such file or directory. Try --help

@@ -36,6 +36,9 @@ if [[ $# -ge 1 ]] ; then
     down)
       networkDown
       ;;
+    createChannel)
+        createChannel
+        ;;
     *)
       echo "Usage: $0 {up|down}"
       exit 1

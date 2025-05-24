@@ -37,8 +37,8 @@ function checkPreReqs() {
 }
 
 function createOrgs() {
-  if [ -d "organizations/localdev/peerOrganizations" ]; then
-    rm -Rf organizations/localdev/peerOrganizations && rm -Rf organizations/localdev/ordererOrganizations
+  if [ -d "organizations/peerOrganizations" ]; then
+    rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
   fi
 
   # Create crypto material using cryptogen
@@ -53,7 +53,7 @@ function createOrgs() {
 
     PS4='\e[1;32m+ \e[0m'
     set -x
-    cryptogen generate --config=./organizations/localdev/cryptogen/crypto-config-org1.yaml --output="organizations/localdev"
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org1.yaml --output="organizations/localdev"
     res=$?
     { set +x; } 2>/dev/null
     if [ $res -ne 0 ]; then
@@ -64,7 +64,7 @@ function createOrgs() {
 
     set -x
     PS4='+ '
-    cryptogen generate --config=./organizations/localdev/cryptogen/crypto-config-org2.yaml --output="organizations/localdev"
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-org2.yaml --output="organizations/localdev"
     res=$?
     { set +x; } 2>/dev/null
     if [ $res -ne 0 ]; then
@@ -74,7 +74,7 @@ function createOrgs() {
     infoln "Creating Orderer Org Identities"
 
     set -x
-    cryptogen generate --config=./organizations/localdev/cryptogen/crypto-config-orderer.yaml --output="organizations/localdev"
+    cryptogen generate --config=./organizations/cryptogen/crypto-config-orderer.yaml --output="organizations/localdev"
     res=$?
     { set +x; } 2>/dev/null
     if [ $res -ne 0 ]; then
@@ -87,9 +87,32 @@ function createOrgs() {
   ./organizations/ccp-generate.sh
 }
 
+function createChannel() {  
+  CONTAINERS=($($CONTAINER_CLI ps | grep hyperledger/ | awk '{print $2}'))
+  len=$(echo ${#CONTAINERS[@]})
+
+  if [[ len -eq 0 ]]; then
+    fatalln "No containers found for hyperledger images"
+  fi
+
+  if [[ len -ne 3 ]]; then
+    fatalln "Expected 3 hyperledger containers, found ${#CONTAINERS[@]}"
+    networkDown
+    exit 1
+  fi
+
+  . scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
+
+}
+
 function networkUp() {
 
   checkPrereqs
+
+  if [[ "$NETWORK_UP" == "true" ]]; then
+    infoln "Network is already up"
+    return
+  fi
 
   if [ ! -d "organizations/peerOrganizations" ]; then
     createOrgs
@@ -106,12 +129,16 @@ function networkUp() {
 
   infoln "DOCKER HOST IS $DOCKER_SOCK"
 
+  NETWORK_UP=true
+
 }
 
 function networkDown() {
     COMPOSE_FILES="-f ./compose/${COMPOSE_FILE_BASE} -f ./compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
     
     DOCKER_SOCK="${DOCKER_SOCK}" ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} down --volumes --remove-orphans 2>&1
+
+    NETWORK_UP=false
 }
 
 

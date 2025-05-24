@@ -2,3 +2,4 @@ Organizations:
   - &OrdererOrg
     Name: OrdererOrg
     ID: OrdererMSP
+    MSPDir: ../organizations/ordererOrganizations/sehnen.com/msp
